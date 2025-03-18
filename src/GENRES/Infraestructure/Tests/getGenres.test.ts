@@ -1,5 +1,5 @@
 import { beforeEach, describe, expect, test, vi } from 'vitest';
-import { getGenres } from '../genresAPI';
+import { getGenres, MAX_LENGTH_GENRES } from '../genresAPI';
 import { collection, getDocs, query, orderBy, limit } from 'firebase/firestore';
 
 // Mock de las funciones de Firestore
@@ -10,6 +10,7 @@ vi.mock("firebase/firestore", () => ({
     query: vi.fn(),
     orderBy: vi.fn(),
     limit: vi.fn(),
+    startAfter: vi.fn()
 }));
 
 // Determinar Mocks
@@ -24,11 +25,11 @@ describe('getGenres', () => {
         vi.clearAllMocks();
     });
 
-    test('Si el ID es NULL retornar los primeros 2 elementos.', async () => {
+    test('Si el ID es NULL retornar apartir del primer elemento.', async () => {
         // Datos simulados
         const LocalDB = [
-            { id: '0hVCtp49R3UVBLSLcXRu', data: { name: 'suspenso' } },
-            { id: '2Ep9rmrjYDKqW2ycKW3c', data: { name: 'entretenimiento' } }
+            { id: '0hVCtp49R3UVBLSLcXRu', data: () => ({ name: 'suspenso' }) },
+            { id: '2Ep9rmrjYDKqW2ycKW3c', data: () => ({ name: 'entretenimiento' }) }
         ];
 
         // Mockeamos cada función de Firestore
@@ -36,18 +37,24 @@ describe('getGenres', () => {
         orderByMock.mockReturnValue("mockOrderBy" as any);
         limitMock.mockReturnValue("mockLimit" as any);
         queryMock.mockReturnValue("mockQuery" as any);
-        getDocsMock.mockResolvedValue({ docs: LocalDB.map(doc => ({ id: doc.id, data: () => doc.data })) } as any);
 
-        // Llamamos a la función con lastID === null
+        // Simulación de getDocs que devuelve solo el primer documento si hay limit(1)
+        getDocsMock.mockResolvedValue({
+            docs: LocalDB.slice(0, MAX_LENGTH_GENRES), // Filtrar solo el primer documento
+        } as any);
+
         const result = await getGenres(null);
 
-        // Verificamos llamadas a Firestore
+        // Verificamos que las funciones se llamaron con los parámetros correctos
+        expect(collection).toHaveBeenCalledWith(expect.anything(), 'GENRES');
+        expect(orderBy).toHaveBeenCalledWith("id", 'asc');
+        expect(limit).toHaveBeenCalledWith(MAX_LENGTH_GENRES);
         expect(query).toHaveBeenCalledWith("mockCollection", "mockOrderBy", "mockLimit");
 
         // Verificamos el resultado esperado
         expect(result).toEqual([
-            { id: '0hVCtp49R3UVBLSLcXRu', name: 'suspenso' },
-            { id: '2Ep9rmrjYDKqW2ycKW3c', name: 'entretenimiento' }
+            { id: '0hVCtp49R3UVBLSLcXRu', name: 'suspenso' }
         ]);
     });
+
 });
