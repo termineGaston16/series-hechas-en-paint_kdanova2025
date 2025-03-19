@@ -14,3 +14,11 @@ export class DataBaseSystemFailure extends Error {
     }
 }
 
+export class WebWorkerError extends Error {
+    constructor(message: string) {
+        super(message);
+        this.name = 'WebWorkerError';
+        this.message = message;
+    }
+}
+
