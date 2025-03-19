@@ -7,6 +7,10 @@ let workerInstance: Worker;
 const getWorker = () => {
     if (!workerInstance) {
         workerInstance = new Worker(new URL("../../Infraestructure/genres-api.webworker.ts", import.meta.url));
+
+        window.addEventListener("beforeunload", () => {
+            workerInstance.terminate();
+        });
     }
     return workerInstance;
 };
@@ -14,10 +18,8 @@ const getWorker = () => {
 
 const fetchGetGenresWorker = (
     action: string,
-    params: {
-        lastID: string | null;
-    }
-) => {
+    params: { lastID: string | null }
+): Promise<Gender_I[]> => {
     return new Promise((resolve, reject) => {
         const worker = getWorker();
 
@@ -27,7 +29,6 @@ const fetchGetGenresWorker = (
             } else {
                 reject(new WebWorkerError(event.data.message));
             }
-            worker.terminate();
         };
 
         worker.postMessage({ action, ...params });
@@ -35,27 +36,27 @@ const fetchGetGenresWorker = (
 };
 
 
-export const useGetGenres = (
-    action: string,
-    params: {
-        lastID: string | null;
-    }
-) => {
+export const useGetGenres = () => {
     return useInfiniteQuery({
         queryKey: ['genres'],
-        queryFn: ({ pageParam = params.lastID }: { pageParam: string | null }) =>
-            fetchGetGenresWorker(
-                action,
+        queryFn: ({ pageParam }: { pageParam: string | null }) => {
+
+            if (
+                (pageParam !== null && typeof pageParam !== 'string')
+                || (typeof pageParam === 'string' && pageParam.length <= 0)
+            ) return [];
+
+            return fetchGetGenresWorker(
+                'getGenres',
                 {
-                    ...params,
                     lastID: pageParam
                 }
-            ),
-        getNextPageParam: (lastGender: Gender_I) => lastGender?.id ?? undefined,
+            )
+        },
+        getNextPageParam: (lastPage) => {
+            return lastPage.length > 0 ? lastPage.at(-1)?.id : undefined
+        },
         initialPageParam: null,
-        enabled: typeof action === 'string'
-            && action.length > 0
-            && (typeof params.lastID === 'string' || params.lastID === null),
         gcTime: 60 * 60 * 1000,
         placeholderData: keepPreviousData,
         refetchOnWindowFocus: false,
@@ -64,5 +65,6 @@ export const useGetGenres = (
         staleTime: 60 * 60 * 1000,
     });
 };
+
 
 

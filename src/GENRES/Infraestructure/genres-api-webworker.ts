@@ -12,7 +12,6 @@ self.onmessage = async (event) => {
 
         switch (action) {
             case "getGenres":
-                console.log("Worker: Ejecutando getGenres()");
                 data = await getGenres(lastID);
                 break;
             default:
@@ -22,11 +21,10 @@ self.onmessage = async (event) => {
         self.postMessage({ status: "success", action, data });
 
     } catch (error) {
-        console.log("Worker: ERROR");
         self.postMessage({
             status: "error",
             action,
-            message: error.message
+            message: (error as Error).message
         });
     }
 
