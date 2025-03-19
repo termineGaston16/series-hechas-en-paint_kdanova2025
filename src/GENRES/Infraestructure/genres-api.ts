@@ -1,7 +1,7 @@
 import { collection, doc, getDoc, getDocs, limit, orderBy, query, startAfter } from "firebase/firestore";
 import { Gender_I } from "../Domain/gender";
 import { db } from "../../UI/FIREBASE/database";
-import { DataBaseError, DataBaseSystemFailure } from "../../UI/ALERTS/ERRORS/Domain/errors";
+import { DataBaseError, DataBaseSystemFailure } from "../../UI/ALERTS/ERRORS/Domain/Errors";
 
 
 export const MAX_LENGTH_GENRES = 5;
