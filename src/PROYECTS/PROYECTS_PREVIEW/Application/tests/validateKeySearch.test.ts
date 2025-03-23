@@ -9,9 +9,9 @@ it('Si la key es éxitosa no debe retonar ninguna alerta.', () => {
 
 // >:( 
 it('Si no es STRING debe retornar una alerta', () => {
-    const result1 = validateKeySearch(true);
-    const result2 = validateKeySearch(undefined);
-    const result3 = validateKeySearch([]);
+    const result1 = validateKeySearch(true as unknown as string);
+    const result2 = validateKeySearch(undefined as unknown as string);
+    const result3 = validateKeySearch([] as unknown as string);
 
     const alert = `Introduce una palabra válida.`;
 

@@ -1,7 +1,8 @@
 import { collection, doc, getDoc, getDocs, limit, orderBy, query, startAfter } from "firebase/firestore";
 import { Gender_I } from "../Domain/gender";
 import { db } from "../../UI/FIREBASE/database";
-import { DataBaseError, DataBaseSystemFailure, WebWorkerError } from "../../UI/ALERTS/ERRORS/Domain/Errors";
+import { DataBaseError, DataBaseSystemFailure, WebWorkerError } from "../../UI/ALERTS/ERRORS/Domain/errors";
+
 
 
 self.onmessage = async (event) => {

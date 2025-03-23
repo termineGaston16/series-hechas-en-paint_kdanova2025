@@ -1,4 +1,4 @@
-import { WebWorkerError } from "../../../UI/ALERTS/ERRORS/Domain/Errors";
+import { WebWorkerError } from "../../../UI/ALERTS/ERRORS/Domain/errors";
 import { ProyectPreview_I } from "../Domain/proyect_preview";
 
 let workerInstance: Worker;

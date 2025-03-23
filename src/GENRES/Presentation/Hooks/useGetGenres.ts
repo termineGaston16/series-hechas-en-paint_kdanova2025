@@ -1,6 +1,6 @@
 import { keepPreviousData, useInfiniteQuery } from "@tanstack/react-query";
 import { Gender_I } from "../../Domain/gender";
-import { WebWorkerError } from "../../../UI/ALERTS/ERRORS/Domain/Errors";
+import { WebWorkerError } from "../../../UI/ALERTS/ERRORS/Domain/errors";
 
 
 let workerInstance: Worker;
