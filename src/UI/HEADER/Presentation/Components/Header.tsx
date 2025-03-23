@@ -6,6 +6,7 @@ export default function Header() {
             <Link
                 to={'/'}>
                 <img
+                    style={{ width: '50%' }}
                     src="/Logo_Web.png"
                     alt="Logo Principal de Series Hechas en Paint (SHenP)"
                     loading="lazy"

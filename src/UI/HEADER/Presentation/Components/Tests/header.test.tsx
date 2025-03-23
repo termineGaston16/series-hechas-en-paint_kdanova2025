@@ -52,8 +52,8 @@ describe('Header', () => {
             </MemoryRouter>
         )
 
-        expect(screen.getByText('© SHenP 2025')).toBeInTheDocument();
-        expect(screen.getByText('© KDA/NOVA 2025')).toBeInTheDocument();
+        expect(screen.getByText('© SHenP 2025'));
+        expect(screen.getByText('© KDA/NOVA 2025'));
     })
 });
 
