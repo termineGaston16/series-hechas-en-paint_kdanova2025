@@ -16,9 +16,9 @@ describe('Header', () => {
         const logo = screen.getByRole('img', {
             name: 'Logo Principal de Series Hechas en Paint (SHenP)',
         });
+        expect(logo).toBeInTheDocument();
         expect(logo).toHaveAttribute('src', '/Logo_Web.png')
         expect(logo).toHaveAttribute('alt', 'Logo Principal de Series Hechas en Paint (SHenP)');
-        expect(logo).toBeInTheDocument();
     })
 
     it('Evaluar que el Logo Principal redireccione al Home', () => {

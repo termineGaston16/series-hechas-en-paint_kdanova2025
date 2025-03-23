@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import NavbarHeader from "../../../NAVBAR_HEADER/Presentation/Components/NavbarHeader";
 
 export default function Header() {
     return (
@@ -13,7 +14,7 @@ export default function Header() {
                 />
             </Link>
 
-            <nav></nav>
+            <NavbarHeader />
 
             <p>
                 <span>© SHenP 2025</span>
